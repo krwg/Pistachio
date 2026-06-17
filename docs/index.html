@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Pistachio — премиальное фисташковое масло холодного отжима. Доставка по России. От 1 490 ₽.">
+  <title>Pistachio — фисташковое масло холодного отжима</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+      --black: #000;
+      --white: #fff;
+      --gray-1: #f5f5f7;
+      --gray-2: #86868b;
+      --gray-3: #6e6e73;
+      --text: #1d1d1f;
+      --blue: #0071e3;
+      --blue-dark: #2997ff;
+      --green: #a8d08d;
+      --gold: #d4a853;
+      --max: 980px;
+      --nav-h: 44px;
+      --mobile-bar-h: 52px;
+      --pad-x: max(16px, env(safe-area-inset-left));
+      --pad-r: max(16px, env(safe-area-inset-right));
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font);
+      background: var(--black);
+      color: var(--white);
+      overflow-x: clip;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ── Nav (единый, как apple.com) ── */
+    .global-nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 9999;
+      height: calc(var(--nav-h) + env(safe-area-inset-top));
+      padding-top: env(safe-area-inset-top);
+      background: rgba(0,0,0,.65);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      transition: background .35s, border-color .35s;
+    }
+    .global-nav.is-light {
+      background: rgba(251,251,253,.78);
+      border-bottom-color: rgba(0,0,0,.08);
+    }
+    .global-nav__inner {
+      max-width: var(--max); margin: 0 auto; height: var(--nav-h);
+      padding: 0 max(22px, var(--pad-x));
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px;
+    }
+    .global-nav__logo {
+      font-size: 21px; font-weight: 600; letter-spacing: .011em;
+      justify-self: start; color: inherit;
+    }
+    .global-nav.is-light .global-nav__logo { color: var(--text); }
+    .global-nav__logo span { display: none; }
+    .global-nav__links {
+      display: flex; list-style: none; gap: 0; justify-self: center;
+    }
+    .global-nav__links a {
+      font-size: 12px; font-weight: 400; letter-spacing: -.01em;
+      color: rgba(255,255,255,.8); padding: 0 11px;
+      min-height: var(--nav-h); display: flex; align-items: center;
+      transition: color .2s;
+    }
+    .global-nav__links a:hover { color: #fff; }
+    .global-nav.is-light .global-nav__links a { color: var(--text); opacity: .8; }
+    .global-nav.is-light .global-nav__links a:hover { opacity: 1; }
+    .global-nav__actions {
+      display: flex; align-items: center; gap: 2px; justify-self: end;
+    }
+    .nav-bag {
+      width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+      color: inherit; opacity: .88;
+    }
+    .nav-bag svg { width: 17px; height: 17px; fill: currentColor; }
+    .menu-btn {
+      display: none; flex-direction: column; gap: 5px;
+      width: 44px; height: 44px; align-items: center; justify-content: center;
+    }
+    .menu-btn span {
+      display: block; width: 18px; height: 1.5px; background: #fff;
+      transition: transform .3s, opacity .3s;
+    }
+    body.menu-open .menu-btn span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    body.menu-open .menu-btn span:nth-child(2) { opacity: 0; }
+    body.menu-open .menu-btn span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .mobile-drawer {
+      position: fixed; inset: 0; z-index: 9998; pointer-events: none; visibility: hidden;
+    }
+    .mobile-drawer.open { pointer-events: auto; visibility: visible; }
+    .mobile-drawer__backdrop {
+      position: absolute; inset: 0; background: rgba(0,0,0,.5); opacity: 0; transition: opacity .35s;
+    }
+    .mobile-drawer.open .mobile-drawer__backdrop { opacity: 1; }
+    .mobile-drawer__panel {
+      position: absolute; top: 0; right: 0; width: min(320px, 88vw); height: 100%;
+      background: #161617; padding: calc(var(--nav-h) + env(safe-area-inset-top) + 24px) 24px 24px;
+      transform: translateX(100%); transition: transform .4s var(--ease-out);
+      overflow-y: auto;
+    }
+    .mobile-drawer.open .mobile-drawer__panel { transform: translateX(0); }
+    .mobile-drawer__links { list-style: none; }
+    .mobile-drawer__links a {
+      display: block; font-size: 21px; font-weight: 600; padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .mobile-drawer__cta { margin-top: 24px; width: 100%; }
+
+    @media (max-width: 834px) {
+      .global-nav__inner { grid-template-columns: 1fr auto; }
+      .global-nav__links { display: none; }
+      .menu-btn { display: flex; }
+      .global-nav__actions .btn-buy--nav { display: none; }
+    }
+    @media (min-width: 835px) {
+      .menu-btn { display: none !important; }
+    }
+
+    .btn-buy--nav {
+      min-height: 28px; padding: 0 12px; font-size: 12px; font-weight: 400;
+    }
+
+    /* ── Typography ── */
+    .headline-hero {
+      font-size: clamp(36px, 10vw, 80px);
+      font-weight: 600; letter-spacing: -0.025em; line-height: 1.05;
+    }
+    .headline-section {
+      font-size: clamp(28px, 7vw, 56px);
+      font-weight: 600; letter-spacing: -0.015em; line-height: 1.08;
+    }
+    .headline-sub {
+      font-size: clamp(22px, 5vw, 32px);
+      font-weight: 600; letter-spacing: -0.01em; line-height: 1.12;
+    }
+    .copy-large {
+      font-size: clamp(17px, 4vw, 21px);
+      line-height: 1.35; letter-spacing: -0.01em;
+    }
+    .copy-body { font-size: clamp(15px, 3.5vw, 17px); line-height: 1.5; letter-spacing: -0.015em; }
+    .copy-caption { font-size: 12px; line-height: 1.4; color: var(--gray-2); }
+    .text-muted { color: var(--gray-2); }
+    .section--light { background: var(--white); color: var(--text); }
+    .section--light .text-muted { color: var(--gray-3); }
+    .section--mist { background: var(--gray-1); color: var(--text); }
+    .section--mist .text-muted { color: var(--gray-3); }
+    .link-more { font-size: 17px; color: var(--blue-dark); min-height: 44px; display: inline-flex; align-items: center; }
+    .section--light .link-more, .section--mist .link-more { color: var(--blue); }
+
+    .btn-buy {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 44px; padding: 0 20px; border-radius: 980px;
+      font-size: 17px; font-weight: 400; color: #fff; background: var(--blue);
+      transition: background .2s; white-space: nowrap;
+    }
+    .btn-buy:hover { background: #0077ed; }
+    .btn-buy--sm { min-height: 28px; font-size: 12px; padding: 0 14px; }
+    .btn-buy--lg { min-height: 44px; font-size: 17px; padding: 0 22px; }
+    .btn-buy--full { width: 100%; font-size: 14px; min-height: 44px; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; min-height: 100svh;
+      padding: calc(var(--nav-h) + env(safe-area-inset-top) + 24px) max(22px, var(--pad-x)) 56px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      background: var(--black);
+    }
+    .hero__content { width: 100%; max-width: var(--max); }
+    .hero__eyebrow {
+      font-size: 17px; font-weight: 400; color: var(--gold);
+      letter-spacing: normal; text-transform: none; margin-bottom: 6px;
+    }
+    .hero__tagline { margin-top: 8px; color: var(--gray-2); max-width: 520px; margin-inline: auto; }
+    .hero__price {
+      margin-top: 14px; font-size: 17px; color: var(--gray-2); font-weight: 400;
+    }
+    .hero__cta {
+      margin-top: 18px; display: flex; flex-wrap: wrap;
+      gap: 16px 24px; justify-content: center; align-items: center;
+    }
+    .hero__product {
+      margin: clamp(32px, 8vw, 56px) auto 0;
+      width: min(100%, 480px);
+      filter: drop-shadow(0 32px 64px rgba(0,0,0,.45));
+    }
+    .hero__note {
+      margin-top: 20px; font-size: 12px; color: var(--gray-2); line-height: 1.5;
+    }
+
+    /* ── Sections ── */
+    .section { padding: clamp(56px, 12vw, 100px) var(--pad-x) clamp(56px, 12vw, 100px) var(--pad-r); }
+    .section__inner { max-width: var(--max); margin: 0 auto; }
+    .section__header { text-align: center; max-width: 680px; margin: 0 auto clamp(32px, 8vw, 56px); }
+    .section__header .copy-large { margin-top: 10px; }
+
+    /* ── Product benefits (mobile-first cards) ── */
+    .benefits {
+      display: grid; grid-template-columns: 1fr; gap: 32px;
+    }
+    @media (min-width: 600px) { .benefits { grid-template-columns: repeat(2, 1fr); gap: 40px 48px; } }
+    @media (min-width: 900px) { .benefits { grid-template-columns: repeat(3, 1fr); } }
+
+    .benefit {
+      padding: 0; border-radius: 0;
+      background: transparent; border: none;
+    }
+    .section--mist .benefit { background: transparent; }
+    .benefit__title { font-size: 19px; font-weight: 600; margin-bottom: 6px; letter-spacing: -.01em; }
+    .benefit__text { font-size: 15px; line-height: 1.47; color: var(--gray-3); }
+
+    /* ── Feature tabs (mobile) ── */
+    .feature-block { background: #000; }
+    .feature-tabs {
+      display: inline-flex; gap: 0; padding: 4px; border-radius: 10px;
+      background: rgba(255,255,255,.08); margin: 0 auto 32px;
+      max-width: calc(100% - 32px);
+    }
+    .feature-tabs-wrap { text-align: center; padding-top: clamp(56px, 10vw, 80px); }
+    .feature-tab {
+      flex: 1; min-width: 0; padding: 7px 14px; border-radius: 8px;
+      font-size: 13px; font-weight: 400; color: var(--gray-2);
+      border: none; min-height: 36px; white-space: nowrap;
+    }
+    .feature-tab.active { background: rgba(255,255,255,.14); color: #fff; }
+    .feature-panels { padding: 0 var(--pad-x) clamp(56px, 10vw, 80px) var(--pad-r); }
+    .feature-panel { display: none; text-align: center; max-width: 520px; margin: 0 auto; }
+    .feature-panel.active { display: block; }
+    .feature-panel .headline-sub { margin-bottom: 12px; }
+    .feature-panel__img {
+      margin-top: 28px; border-radius: 20px; overflow: hidden;
+      aspect-ratio: 4/3; background: #111;
+    }
+    .feature-panel__img img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Desktop sticky (hidden on mobile) */
+    .sticky-feature { display: none; }
+    @media (min-width: 835px) {
+      .feature-tabs, .feature-panels { display: none; }
+      .sticky-feature {
+        display: block; min-height: 280vh; position: relative; background: #000;
+      }
+      .sticky-feature__pin {
+        position: sticky; top: calc(var(--nav-h) + env(safe-area-inset-top));
+        height: calc(100dvh - var(--nav-h) - env(safe-area-inset-top));
+        display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+        max-width: var(--max); margin: 0 auto; padding: 0 22px;
+      }
+      .sticky-feature__text { position: relative; height: 180px; }
+      .sticky-feature__slide {
+        position: absolute; inset: 0; opacity: 0; transform: translateY(16px);
+        transition: opacity .5s, transform .5s;
+        display: flex; flex-direction: column; justify-content: center;
+      }
+      .sticky-feature__slide.active { opacity: 1; transform: none; }
+      .sticky-feature__visual { position: relative; aspect-ratio: 1; border-radius: 24px; overflow: hidden; }
+      .sticky-feature__frame {
+        position: absolute; inset: 0; opacity: 0; transition: opacity .6s;
+      }
+      .sticky-feature__frame.active { opacity: 1; }
+      .sticky-feature__frame img { width: 100%; height: 100%; object-fit: cover; }
+    }
+
+    /* ── Bento ── */
+    .bento {
+      display: grid; grid-template-columns: 1fr; gap: 12px;
+    }
+    @media (min-width: 600px) { .bento { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+    @media (min-width: 900px) {
+      .bento { grid-template-columns: repeat(6, 1fr); gap: 16px; }
+      .bento__cell--wide { grid-column: span 4; }
+      .bento__cell--half { grid-column: span 3; }
+    }
+    .bento__cell {
+      border-radius: 20px; padding: clamp(24px, 5vw, 36px);
+      background: var(--white); min-height: 180px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .bento__cell--dark { background: #000; color: #fff; }
+    .bento__label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
+    .bento__cell--dark .bento__label { color: var(--green); }
+    .bento__title { font-size: clamp(20px, 4vw, 26px); font-weight: 600; line-height: 1.15; margin-bottom: 6px; }
+    .bento__desc { font-size: 14px; line-height: 1.45; color: var(--gray-3); }
+    .bento__cell--dark .bento__desc { color: var(--gray-2); }
+    .bento__stat { font-size: clamp(36px, 8vw, 56px); font-weight: 600; letter-spacing: -.02em; line-height: 1; }
+
+    /* ── Garden with bg ── */
+    .garden-section {
+      position: relative; overflow: hidden;
+      padding: clamp(64px, 14vw, 120px) var(--pad-x);
+    }
+    .garden-section__bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .garden-section__bg img { width: 100%; height: 100%; object-fit: cover; }
+    .garden-section__bg::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.7), rgba(0,0,0,.88));
+    }
+    .garden-section .section__inner { position: relative; z-index: 1; }
+
+    /* ── Spec strip ── */
+    .spec-strip {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+      background: rgba(255,255,255,.08); border-radius: 16px; overflow: hidden;
+    }
+    @media (min-width: 600px) { .spec-strip { grid-template-columns: repeat(4, 1fr); } }
+    .spec-strip__item {
+      background: #161617; padding: clamp(20px, 4vw, 28px) 16px; text-align: center;
+    }
+    .section--light .spec-strip__item, .section--mist .spec-strip__item { background: var(--white); }
+    .spec-strip__value { font-size: clamp(24px, 6vw, 40px); font-weight: 600; letter-spacing: -.02em; }
+    .spec-strip__label { margin-top: 6px; font-size: 12px; color: var(--gray-2); }
+
+    /* ── Carousel ── */
+    .carousel-wrap { margin: 0 calc(-1 * var(--pad-x)); overflow: hidden; }
+    .carousel {
+      display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--pad-x);
+      padding: 4px var(--pad-x) 24px var(--pad-r);
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .carousel::-webkit-scrollbar { display: none; }
+    .carousel__slide {
+      flex: 0 0 min(300px, 86vw); scroll-snap-align: start;
+      border-radius: 20px; overflow: hidden; background: var(--white);
+    }
+    .carousel__slide--dark { background: #161617; color: #fff; }
+    .carousel__media { height: clamp(160px, 40vw, 220px); overflow: hidden; }
+    .carousel__media img { width: 100%; height: 100%; object-fit: cover; }
+    .bento__cell--img {
+      padding: 0; min-height: 320px; justify-content: flex-end;
+      background-size: cover; background-position: center;
+    }
+    .bento__cell--img .bento__overlay {
+      padding: clamp(24px, 5vw, 36px);
+      background: linear-gradient(to top, rgba(0,0,0,.85) 0%, transparent 100%);
+      width: 100%;
+    }
+    .carousel__media--grad { display: none; }
+
+    @media (max-width: 734px) {
+      .hide-mobile { display: none; }
+    }
+    .carousel__body { padding: 20px 20px 24px; }
+    .carousel__title { font-size: 19px; font-weight: 600; margin-bottom: 6px; }
+    .carousel__text { font-size: 14px; line-height: 1.45; color: var(--gray-3); }
+    .carousel__slide--dark .carousel__text { color: var(--gray-2); }
+
+    /* ── Compare scroll ── */
+    .table-scroll {
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      margin: 0 calc(-1 * var(--pad-x)); padding: 0 var(--pad-x);
+      scrollbar-width: none;
+    }
+    .table-scroll::-webkit-scrollbar { display: none; }
+    .compare-table {
+      width: 100%; min-width: 520px; border-collapse: collapse;
+      font-size: 13px;
+    }
+    .compare-table th, .compare-table td {
+      padding: 14px 10px; text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .compare-table th:first-child, .compare-table td:first-child {
+      text-align: left; color: var(--gray-3); position: sticky; left: 0;
+      background: var(--gray-1); z-index: 1;
+    }
+    .compare-table thead th { font-size: 15px; font-weight: 600; padding-bottom: 16px; border: none; }
+    .compare-table .highlight { color: var(--blue); font-weight: 600; }
+
+    /* ── Buy ── */
+    .buy-section {
+      background: var(--white); color: var(--text);
+      text-align: center;
+      padding: clamp(64px, 12vw, 100px) var(--pad-x);
+      padding-bottom: calc(clamp(64px, 12vw, 100px) + var(--mobile-bar-h) + env(safe-area-inset-bottom));
+    }
+    @media (min-width: 835px) {
+      .buy-section { padding-bottom: clamp(64px, 12vw, 100px); }
+    }
+    .buy-grid {
+      display: grid; grid-template-columns: 1fr; gap: 12px;
+      max-width: 400px; margin: 32px auto 0;
+    }
+    @media (min-width: 600px) {
+      .buy-grid { grid-template-columns: repeat(3, 1fr); max-width: var(--max); gap: 16px; }
+    }
+    .buy-card {
+      border-radius: 20px; padding: 28px 20px;
+      background: var(--gray-1); text-align: center;
+      transition: transform .25s;
+    }
+    .buy-card--featured {
+      background: #fff; outline: 2px solid var(--blue); outline-offset: -2px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.08);
+    }
+    .buy-card__badge {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .06em;
+      background: var(--blue); color: #fff; padding: 4px 10px;
+      border-radius: 980px; margin-bottom: 12px;
+    }
+    .buy-card__size { font-size: clamp(36px, 8vw, 44px); font-weight: 600; letter-spacing: -.02em; }
+    .buy-card__unit { font-size: 13px; color: var(--gray-3); margin-bottom: 12px; }
+    .buy-card__price { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+    .buy-card__per { font-size: 12px; color: var(--gray-3); margin-bottom: 16px; }
+    .buy-card__per strong { color: var(--text); }
+
+    .delivery-bar {
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+      margin-top: 32px; max-width: 640px; margin-inline: auto;
+    }
+    .delivery-bar__item {
+      flex: 1 1 140px; padding: 16px; border-radius: 14px;
+      background: var(--gray-1); font-size: 13px; line-height: 1.4;
+    }
+    .delivery-bar__item strong { display: block; font-size: 14px; margin-bottom: 4px; }
+
+    /* ── Mobile sticky buy bar ── */
+    .mobile-buy-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 998;
+      height: calc(var(--mobile-bar-h) + env(safe-area-inset-bottom));
+      padding: 8px var(--pad-x) env(safe-area-inset-bottom) var(--pad-r);
+      background: rgba(251,251,253,.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(0,0,0,.1);
+      display: flex; align-items: center; gap: 12px;
+      transform: translateY(100%); transition: transform .35s var(--ease-out);
+    }
+    .mobile-buy-bar.visible { transform: translateY(0); }
+    .mobile-buy-bar__info { flex: 1; min-width: 0; text-align: left; color: var(--text); }
+    .mobile-buy-bar__info strong { display: block; font-size: 15px; }
+    .mobile-buy-bar__info span { font-size: 12px; color: var(--gray-3); }
+    @media (min-width: 835px) { .mobile-buy-bar { display: none; } }
+
+    /* ── FAQ ── */
+    .accordion { max-width: 100%; }
+    .accordion__item { border-bottom: 1px solid rgba(0,0,0,.08); }
+    .accordion__btn {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; padding: 18px 0; font-size: clamp(15px, 3.5vw, 17px);
+      font-weight: 600; color: var(--text); text-align: left; min-height: 44px;
+    }
+    .accordion__icon { font-size: 22px; font-weight: 300; color: var(--gray-3); flex-shrink: 0; transition: transform .3s; }
+    .accordion__item.open .accordion__icon { transform: rotate(45deg); }
+    .accordion__panel { max-height: 0; overflow: hidden; transition: max-height .4s; }
+    .accordion__panel-inner { padding: 0 0 18px; font-size: 15px; line-height: 1.5; color: var(--gray-3); }
+    .accordion__item.open .accordion__panel { max-height: 280px; }
+
+    /* ── Footer ── */
+    .footer {
+      background: var(--gray-1); color: var(--gray-3);
+      padding: 40px var(--pad-x) max(24px, env(safe-area-inset-bottom)) var(--pad-r);
+      font-size: 12px;
+    }
+    .footer__inner { max-width: var(--max); margin: 0 auto; }
+    .footer__cols {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px 16px;
+      padding-bottom: 28px; border-bottom: 1px solid rgba(0,0,0,.08); margin-bottom: 16px;
+    }
+    @media (min-width: 600px) { .footer__cols { grid-template-columns: repeat(4, 1fr); } }
+    .footer__col h4 { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+    .footer__col a { display: block; color: var(--gray-3); margin-bottom: 8px; min-height: 32px; line-height: 32px; }
+    .footer__col a:hover { color: var(--text); text-decoration: underline; }
+
+    /* ── Reveal ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease-out), transform .7s var(--ease-out); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="global-nav" id="globalNav" aria-label="Навигация">
+    <div class="global-nav__inner">
+      <a href="#" class="global-nav__logo">Pistachio</a>
+      <ul class="global-nav__links">
+        <li><a href="#product">Масло</a></li>
+        <li><a href="#garden">Сад</a></li>
+        <li><a href="#process">Производство</a></li>
+        <li><a href="#specs">Характеристики</a></li>
+      </ul>
+      <div class="global-nav__actions">
+        <a href="#buy" class="btn-buy btn-buy--nav btn-buy--sm">Купить</a>
+        <a href="#buy" class="nav-bag" aria-label="Корзина">
+          <svg viewBox="0 0 17 19" aria-hidden="true"><path d="M8.5 0a4.5 4.5 0 0 0-4.47 4.06L.05 6.12a.7.7 0 0 0 .69.88h1.4l1.2 9.5a1.4 1.4 0 0 0 1.39 1.22h9.54a1.4 1.4 0 0 0 1.39-1.22l1.2-9.5h1.4a.7.7 0 0 0 .69-.88L12.97 4.06A4.5 4.5 0 0 0 8.5 0zm0 1.4a3.1 3.1 0 0 1 3.07 2.8H5.43A3.1 3.1 0 0 1 8.5 1.4z"/></svg>
+        </a>
+        <button class="menu-btn" id="menuBtn" aria-label="Меню" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="mobile-drawer__backdrop" id="drawerBackdrop"></div>
+    <div class="mobile-drawer__panel">
+      <ul class="mobile-drawer__links">
+        <li><a href="#product">Масло</a></li>
+        <li><a href="#garden">Наш сад</a></li>
+        <li><a href="#process">Производство</a></li>
+        <li><a href="#specs">Характеристики</a></li>
+        <li><a href="#buy">Купить</a></li>
+      </ul>
+      <a href="#buy" class="btn-buy btn-buy--lg btn-buy--full mobile-drawer__cta">Заказать от 1 490 ₽</a>
+    </div>
+  </div>
+
+  <header class="hero" id="top">
+    <div class="hero__content">
+      <p class="hero__eyebrow">Новинка</p>
+      <h1 class="headline-hero">Pistachio Oil.</h1>
+      <p class="copy-large hero__tagline">Фисташковое масло холодного отжима.<br class="hide-mobile"> Первый сорт. Один сад.</p>
+      <p class="hero__price">от 1 490 ₽</p>
+      <div class="hero__cta">
+        <a href="#buy" class="btn-buy btn-buy--lg">Купить</a>
+        <a href="#product" class="link-more">Подробнее &#8250;</a>
+      </div>
+      <img class="hero__product" src="images/hero-product.png" alt="Бутылка Pistachio — фисташковое масло холодного отжима" width="960" height="960" fetchpriority="high">
+      <p class="hero__note">Доставка по России · Бесплатно от 5 000 ₽ · Возврат 14 дней</p>
+    </div>
+  </header>
+
+  <!-- Why buy -->
+  <section class="section section--mist" id="product">
+    <div class="section__inner">
+      <div class="section__header reveal">
+        <h2 class="headline-section">Почему Pistachio.</h2>
+        <p class="copy-large text-muted">Мы продаём одно — фисташковое масло. Без лишних SKU, без компромиссов по качеству.</p>
+      </div>
+      <div class="benefits">
+        <article class="benefit reveal">
+          <h3 class="benefit__title">Первый холодный отжим</h3>
+          <p class="benefit__text">≤27°C, один проход. Сохраняем витамин E, хлорофилл и ореховый аромат — то, что теряется при рафинации.</p>
+        </article>
+        <article class="benefit reveal">
+          <h3 class="benefit__title">Один сад — одна партия</h3>
+          <p class="benefit__text">1200 деревьев, прослеживаемость до урожая. Номер партии на каждой бутылке.</p>
+        </article>
+        <article class="benefit reveal">
+          <h3 class="benefit__title">48 часов от ореха до бутылки</h3>
+          <p class="benefit__text">Свежесть влияет на вкус и кислотность 0,3%. Мы не храним орехи месяцами.</p>
+        </article>
+        <article class="benefit reveal">
+          <h3 class="benefit__title">Финишное масло для кухни</h3>
+          <p class="benefit__text">Салаты, паста, рыба, десерты — одна капля меняет блюдо. Не для жарки: так сохраняется весь букет.</p>
+        </article>
+        <article class="benefit reveal">
+          <h3 class="benefit__title">Тёмное стекло + азот</h3>
+          <p class="benefit__text">Защита от света и окисления. Срок годности 12 месяцев, после вскрытия — 6 месяцев в холодильнике.</p>
+        </article>
+        <article class="benefit reveal">
+          <h3 class="benefit__title">Доставка по России</h3>
+          <p class="benefit__text">Курьер, ПВЗ, почта. Упаковка с амортизацией — бутылка доедет целой.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature: mobile tabs + desktop sticky -->
+  <section class="feature-block" id="story">
+    <div class="feature-tabs-wrap">
+      <div class="feature-tabs" role="tablist" aria-label="О продукте">
+      <button class="feature-tab active" role="tab" aria-selected="true" data-tab="0">Состав</button>
+      <button class="feature-tab" role="tab" aria-selected="false" data-tab="1">Вкус</button>
+      <button class="feature-tab" role="tab" aria-selected="false" data-tab="2">Применение</button>
+      </div>
+    </div>
+    <div class="feature-panels">
+      <div class="feature-panel active" role="tabpanel">
+        <h2 class="headline-sub">100% фисташка.<br>Ничего лишнего.</h2>
+        <p class="copy-body text-muted">2 кг отборных орехов на литр масла. Без добавок, без фильтрации, без рафинации. Нерафинированное — значит живое.</p>
+        <div class="feature-panel__img"><img src="images/hero-product.png" alt="Состав масла Pistachio" loading="lazy"></div>
+      </div>
+      <div class="feature-panel" role="tabpanel">
+        <h2 class="headline-sub">Орех. Мёд.<br>Лёгкая пряность.</h2>
+        <p class="copy-body text-muted">Дегустационный профиль: жареный миндаль, мёд акации, белый перец в послевкусии. Идеально для финиша блюда.</p>
+        <div class="feature-panel__img"><img src="images/recipe-salad.png" alt="Блюдо с маслом Pistachio" loading="lazy"></div>
+      </div>
+      <div class="feature-panel" role="tabpanel">
+        <h2 class="headline-sub">Капля —<br>и готово.</h2>
+        <p class="copy-body text-muted">15 мл на салат, 10 мл на рыбу после гриля, капля на мороженое. Нагрев выше 160°C убивает аромат — используйте в конце.</p>
+        <div class="feature-panel__img"><img src="images/recipe-salmon.png" alt="Блюдо с маслом Pistachio" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="sticky-feature" data-sticky>
+      <div class="sticky-feature__pin">
+        <div class="sticky-feature__text">
+          <div class="sticky-feature__slide active">
+            <h2 class="headline-sub">100% фисташка.<br>Ничего лишнего.</h2>
+            <p class="copy-body text-muted">2 кг отборных орехов на литр. Без добавок и рафинации.</p>
+          </div>
+          <div class="sticky-feature__slide">
+            <h2 class="headline-sub">Орех. Мёд.<br>Лёгкая пряность.</h2>
+            <p class="copy-body text-muted">Жареный миндаль, мёд акации, белый перец в послевкусии.</p>
+          </div>
+          <div class="sticky-feature__slide">
+            <h2 class="headline-sub">Капля —<br>и готово.</h2>
+            <p class="copy-body text-muted">Финишное масло для салатов, рыбы, пасты и десертов.</p>
+          </div>
+        </div>
+        <div class="sticky-feature__visual">
+          <div class="sticky-feature__frame active"><img src="images/hero-product.png" alt=""></div>
+          <div class="sticky-feature__frame"><img src="images/recipe-salad.png" alt=""></div>
+          <div class="sticky-feature__frame"><img src="images/recipe-salmon.png" alt=""></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bento specs -->
+  <section class="section section--light">
+    <div class="section__inner">
+      <div class="section__header reveal">
+        <h2 class="headline-section">Характеристики<br>вашей бутылки.</h2>
+      </div>
+      <div class="bento">
+        <article class="bento__cell bento__cell--wide bento__cell--dark bento__cell--img reveal" style="background-image:url('images/hero-product.png')">
+          <div class="bento__overlay">
+            <span class="bento__label">Главное</span>
+            <h3 class="bento__title">Холодный отжим ≤27°C</h3>
+            <p class="bento__desc">Шнековый пресс одного прохода. Нерафинированное масло первого отжима.</p>
+          </div>
+        </article>
+        <article class="bento__cell bento__cell--half reveal">
+          <span class="bento__stat" data-count="1200">0</span>
+          <span class="bento__label">Деревьев в саду</span>
+        </article>
+        <article class="bento__cell bento__cell--half reveal">
+          <span class="bento__stat">0,3%</span>
+          <span class="bento__label">Кислотность</span>
+        </article>
+        <article class="bento__cell reveal">
+          <span class="bento__label">Омега-9</span>
+          <h3 class="bento__title">54%</h3>
+        </article>
+        <article class="bento__cell bento__cell--dark reveal">
+          <span class="bento__label">Дымление</span>
+          <h3 class="bento__title">210°C</h3>
+        </article>
+        <article class="bento__cell reveal">
+          <span class="bento__label">Отжим</span>
+          <h3 class="bento__title">18–22%</h3>
+          <p class="bento__desc">выход масла от массы ядра</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Garden -->
+  <section class="garden-section" id="garden">
+    <div class="garden-section__bg">
+      <img src="images/garden-bg.png" alt="" loading="lazy">
+    </div>
+    <div class="section__inner reveal">
+      <div class="section__header">
+        <h2 class="headline-section">Сад, где растёт<br>ваше масло.</h2>
+        <p class="copy-large text-muted">800 метров над уровнем моря. Известковая почва, 48°C летом, ручной сбор. Масло Pistachio начинается здесь.</p>
+      </div>
+      <div class="spec-strip">
+        <div class="spec-strip__item">
+          <div class="spec-strip__value" data-count="1200">0</div>
+          <div class="spec-strip__label">деревьев</div>
+        </div>
+        <div class="spec-strip__item">
+          <div class="spec-strip__value" data-count="48">0</div>
+          <div class="spec-strip__label">часов до отжима</div>
+        </div>
+        <div class="spec-strip__item">
+          <div class="spec-strip__value">0%</div>
+          <div class="spec-strip__label">пестицидов</div>
+        </div>
+        <div class="spec-strip__item">
+          <div class="spec-strip__value" data-count="800">0</div>
+          <div class="spec-strip__label">метров высота</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section section--light" id="process">
+    <div class="section__inner">
+      <div class="section__header reveal">
+        <h2 class="headline-section">Как мы делаем<br>ваше масло.</h2>
+        <p class="copy-large text-muted">Пять шагов от «улыбающегося» ореха до бутылки с вашим заказом.</p>
+      </div>
+    </div>
+    <div class="carousel-wrap reveal">
+      <div class="carousel">
+        <article class="carousel__slide">
+          <div class="carousel__media"><img src="images/process-harvest.png" alt="Сбор фисташек" loading="lazy"></div>
+          <div class="carousel__body">
+            <h3 class="carousel__title">Сбор</h3>
+            <p class="carousel__text">Только раскрытая скорлупа — признак спелости. Ручной сбор в лён.</p>
+          </div>
+        </article>
+        <article class="carousel__slide">
+          <div class="carousel__media"><img src="images/process-drying.png" alt="Сушка орехов" loading="lazy"></div>
+          <div class="carousel__body">
+            <h3 class="carousel__title">Сушка</h3>
+            <p class="carousel__text">72 часа на солнце. Влажность ядра — 4%.</p>
+          </div>
+        </article>
+        <article class="carousel__slide">
+          <div class="carousel__media"><img src="images/hero-product.png" alt="Отжим масла" loading="lazy"></div>
+          <div class="carousel__body">
+            <h3 class="carousel__title">Отжим</h3>
+            <p class="carousel__text">≤27°C, один проход. Жмых — в компост сада.</p>
+          </div>
+        </article>
+        <article class="carousel__slide">
+          <div class="carousel__media"><img src="images/garden-bg.png" alt="Отстаивание масла" loading="lazy"></div>
+          <div class="carousel__body">
+            <h3 class="carousel__title">Отстаивание</h3>
+            <p class="carousel__text">14 дней при +12°C. Процеживание без фильтрации.</p>
+          </div>
+        </article>
+        <article class="carousel__slide">
+          <div class="carousel__media"><img src="images/hero-product.png" alt="Розлив в бутылки" loading="lazy"></div>
+          <div class="carousel__body">
+            <h3 class="carousel__title">Розлив</h3>
+            <p class="carousel__text">Тёмное стекло, азот, этикетка с датой урожая.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recipes -->
+  <section class="section" style="background:#000">
+    <div class="section__inner">
+      <div class="section__header reveal">
+        <h2 class="headline-section">С чем подавать.</h2>
+        <p class="copy-large text-muted">Идеи от нашей команды — и от покупателей Pistachio.</p>
+      </div>
+    </div>
+    <div class="carousel-wrap reveal">
+      <div class="carousel">
+        <article class="carousel__slide carousel__slide--dark">
+          <div class="carousel__media"><img src="images/recipe-salad.png" alt="Burrata с инжиром" loading="lazy"></div>
+          <div class="carousel__body">
+            <h3 class="carousel__title">Burrata и инжир</h3>
+            <p class="carousel__text">15 мл Pistachio, руккола, морская соль. 3 минуты — ресторан дома.</p>
+          </div>
+        </article>
+        <article class="carousel__slide carousel__slide--dark">
+          <div class="carousel__media"><img src="images/recipe-icecream.png" alt="Мороженое с маслом Pistachio" loading="lazy"></div>
+          <div class="carousel__body">
+            <h3 class="carousel__title">Мороженое finito</h3>
+            <p class="carousel__text">Капля на холодное — контраст температур раскрывает орех.</p>
+          </div>
+        </article>
+        <article class="carousel__slide carousel__slide--dark">
+          <div class="carousel__media"><img src="images/recipe-salmon.png" alt="Лосось с маслом Pistachio" loading="lazy"></div>
+          <div class="carousel__body">
+            <h3 class="carousel__title">Лосось на гриле</h3>
+            <p class="carousel__text">10 мл сразу после гриля — масло создаёт глазурь.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compare -->
+  <section class="section section--mist" id="specs">
+    <div class="section__inner reveal">
+      <div class="section__header">
+        <h2 class="headline-section">Pistachio vs другие масла.</h2>
+        <p class="copy-large text-muted">Прокрутите таблицу на мобильном →</p>
+      </div>
+      <div class="table-scroll">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="highlight">Pistachio</th>
+              <th>Оливковое</th>
+              <th>Кокосовое</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Точка дымления</td><td class="highlight">210°C</td><td>190°C</td><td>177°C</td></tr>
+            <tr><td>Омега-9</td><td class="highlight">54%</td><td>73%</td><td>6%</td></tr>
+            <tr><td>Витамин E</td><td class="highlight">Высокий</td><td>Средний</td><td>Низкий</td></tr>
+            <tr><td>Вкус</td><td class="highlight">Орех · Мёд</td><td>Травы</td><td>Кокос</td></tr>
+            <tr><td>На литр</td><td class="highlight">2 кг ореха</td><td>5 кг оливок</td><td>Массовое</td></tr>
+            <tr><td>Цена 250 мл</td><td class="highlight">3 290 ₽</td><td>~800 ₽</td><td>~600 ₽</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section--light">
+    <div class="section__inner reveal">
+      <div class="section__header">
+        <h2 class="headline-sub">Вопросы перед заказом</h2>
+      </div>
+      <div class="accordion">
+        <div class="accordion__item">
+          <button class="accordion__btn" aria-expanded="false">Как оформить заказ?<span class="accordion__icon">+</span></button>
+          <div class="accordion__panel"><div class="accordion__panel-inner">Выберите объём ниже, нажмите «В корзину». Мы перезвоним для подтверждения адреса и способа оплаты. Доставка 2–7 дней по России.</div></div>
+        </div>
+        <div class="accordion__item">
+          <button class="accordion__btn" aria-expanded="false">Почему масло зеленоватое?<span class="accordion__icon">+</span></button>
+          <div class="accordion__panel"><div class="accordion__panel-inner">Хлорофилл из ядра фисташки — признак холодного отжима. Со временем оттенок может светлеть, это нормально.</div></div>
+        </div>
+        <div class="accordion__item">
+          <button class="accordion__btn" aria-expanded="false">Как хранить после вскрытия?<span class="accordion__icon">+</span></button>
+          <div class="accordion__panel"><div class="accordion__panel-inner">В холодильнике, плотно закрытым, до 6 месяцев. Не храните у плиты.</div></div>
+        </div>
+        <div class="accordion__item">
+          <button class="accordion__btn" aria-expanded="false">Есть ли оптовые цены?<span class="accordion__icon">+</span></button>
+          <div class="accordion__panel"><div class="accordion__panel-inner">Да, для ресторанов и магазинов — от 5 литров. Напишите на hello@pistachio.ru с пометкой «опт».</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUY -->
+  <section class="buy-section" id="buy">
+    <h2 class="headline-section reveal">Заказать Pistachio.</h2>
+    <p class="copy-large text-muted reveal" style="margin-top:8px">Урожай 2025. Остаток партии ограничен.</p>
+    <div class="buy-grid">
+      <article class="buy-card reveal">
+        <div class="buy-card__size">100 мл</div>
+        <div class="buy-card__unit">Пробник · 1–2 недели</div>
+        <div class="buy-card__price">1 490 ₽</div>
+        <div class="buy-card__per"><strong>14,9 ₽</strong> / мл</div>
+        <button class="btn-buy btn-buy--full" data-product="100ml" data-price="1490">В корзину</button>
+      </article>
+      <article class="buy-card buy-card--featured reveal">
+        <span class="buy-card__badge">Популярный</span>
+        <div class="buy-card__size">250 мл</div>
+        <div class="buy-card__unit">Оптимально для кухни</div>
+        <div class="buy-card__price">3 290 ₽</div>
+        <div class="buy-card__per"><strong>13,2 ₽</strong> / мл · выгоднее</div>
+        <button class="btn-buy btn-buy--full" data-product="250ml" data-price="3290">В корзину</button>
+      </article>
+      <article class="buy-card reveal">
+        <div class="buy-card__size">500 мл</div>
+        <div class="buy-card__unit">Запас · для семьи</div>
+        <div class="buy-card__price">5 990 ₽</div>
+        <div class="buy-card__per"><strong>12,0 ₽</strong> / мл · −10%</div>
+        <button class="btn-buy btn-buy--full" data-product="500ml" data-price="5990">В корзину</button>
+      </article>
+    </div>
+    <div class="delivery-bar reveal">
+      <div class="delivery-bar__item"><strong>Доставка</strong>Бесплатно от 5 000 ₽. 2–7 дней по РФ.</div>
+      <div class="delivery-bar__item"><strong>Оплата</strong>Картой онлайн или при получении.</div>
+      <div class="delivery-bar__item"><strong>Гарантия</strong>Возврат 14 дней, если не понравилось.</div>
+    </div>
+    <p class="copy-caption reveal" style="margin-top:24px;color:var(--gray-3)">hello@pistachio.ru · +7 (800) 555-35-35 · Пн–Пт 10:00–19:00</p>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__cols">
+        <div class="footer__col">
+          <h4>Магазин</h4>
+          <a href="#buy">100 мл — 1 490 ₽</a>
+          <a href="#buy">250 мл — 3 290 ₽</a>
+          <a href="#buy">500 мл — 5 990 ₽</a>
+        </div>
+        <div class="footer__col">
+          <h4>Доставка</h4>
+          <a href="#">По России</a>
+          <a href="#">Оплата</a>
+          <a href="#">Возврат</a>
+        </div>
+        <div class="footer__col">
+          <h4>О бренде</h4>
+          <a href="#garden">Наш сад</a>
+          <a href="#process">Производство</a>
+          <a href="#">Опт</a>
+        </div>
+        <div class="footer__col">
+          <h4>Контакты</h4>
+          <a href="mailto:hello@pistachio.ru">hello@pistachio.ru</a>
+          <a href="tel:+78005553535">8 800 555-35-35</a>
+        </div>
+      </div>
+      <p class="footer__legal">© 2026 Pistachio Oil. Фисташковое масло холодного отжима.</p>
+    </div>
+  </footer>
+
+  <!-- Mobile sticky buy -->
+  <div class="mobile-buy-bar" id="mobileBuyBar" aria-hidden="true">
+    <div class="mobile-buy-bar__info">
+      <strong>Pistachio 250 мл</strong>
+      <span>3 290 ₽ · бесплатная доставка от 5 000 ₽</span>
+    </div>
+    <a href="#buy" class="btn-buy">Купить</a>
+  </div>
+
+  <script>
+    /* Mobile menu */
+    const menuBtn = document.getElementById('menuBtn');
+    const drawer = document.getElementById('mobileDrawer');
+    const backdrop = document.getElementById('drawerBackdrop');
+
+    function toggleMenu(open) {
+      document.body.classList.toggle('menu-open', open);
+      drawer.classList.toggle('open', open);
+      drawer.setAttribute('aria-hidden', !open);
+      menuBtn.setAttribute('aria-expanded', open);
+    }
+
+    menuBtn.addEventListener('click', () => toggleMenu(!drawer.classList.contains('open')));
+    backdrop.addEventListener('click', () => toggleMenu(false));
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+    /* Feature tabs (mobile) */
+    const tabs = document.querySelectorAll('.feature-tab');
+    const panels = document.querySelectorAll('.feature-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const i = +tab.dataset.tab;
+        tabs.forEach(t => { t.classList.toggle('active', t === tab); t.setAttribute('aria-selected', t === tab); });
+        panels.forEach((p, j) => p.classList.toggle('active', j === i));
+      });
+    });
+
+    /* Sticky scroll (desktop) */
+    (() => {
+      const section = document.querySelector('[data-sticky]');
+      if (!section || matchMedia('(max-width: 834px)').matches) return;
+      const slides = section.querySelectorAll('.sticky-feature__slide');
+      const frames = section.querySelectorAll('.sticky-feature__frame');
+      const total = slides.length;
+      const update = () => {
+        const rect = section.getBoundingClientRect();
+        const scrollable = section.offsetHeight - innerHeight;
+        const progress = Math.min(Math.max(-rect.top / scrollable, 0), .999);
+        const index = Math.min(Math.floor(progress * total), total - 1);
+        slides.forEach((s, i) => s.classList.toggle('active', i === index));
+        frames.forEach((f, i) => f.classList.toggle('active', i === index));
+      };
+      addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+
+    /* Reveal */
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    /* Counters */
+    document.querySelectorAll('[data-count]').forEach(el => {
+      new IntersectionObserver(([e]) => {
+        if (!e.isIntersecting) return;
+        const target = +el.dataset.count;
+        const start = performance.now();
+        const tick = now => {
+          const t = Math.min((now - start) / 1400, 1);
+          el.textContent = Math.round(target * (1 - Math.pow(1 - t, 4))).toLocaleString('ru-RU');
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }, { threshold: 0.4 }).observe(el);
+    });
+
+    /* Accordion */
+    document.querySelectorAll('.accordion__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.accordion__item');
+        const open = item.classList.contains('open');
+        document.querySelectorAll('.accordion__item.open').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.accordion__btn').setAttribute('aria-expanded', 'false');
+        });
+        if (!open) { item.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+      });
+    });
+
+    /* Cart feedback */
+    document.querySelectorAll('[data-product]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name = btn.dataset.product;
+        const price = btn.dataset.price;
+        btn.textContent = 'Добавлено ✓';
+        btn.style.background = '#34c759';
+        setTimeout(() => { btn.textContent = 'В корзину'; btn.style.background = ''; }, 2000);
+      });
+    });
+
+    /* Mobile buy bar */
+    const buyBar = document.getElementById('mobileBuyBar');
+    const buySection = document.getElementById('buy');
+    if (buyBar && buySection) {
+      new IntersectionObserver(([e]) => {
+        buyBar.classList.toggle('visible', !e.isIntersecting && scrollY > 400);
+        buyBar.setAttribute('aria-hidden', e.isIntersecting);
+      }, { threshold: 0.1 }).observe(buySection);
+    }
+
+    /* Nav: светлая тема на светлых секциях */
+    const globalNav = document.getElementById('globalNav');
+    const lightSections = document.querySelectorAll('.section--light, .section--mist, .buy-section, .footer');
+    if (globalNav) {
+      addEventListener('scroll', () => {
+        const navH = globalNav.offsetHeight;
+        let onLight = false;
+        lightSections.forEach(sec => {
+          const r = sec.getBoundingClientRect();
+          if (r.top < navH && r.bottom > navH) onLight = true;
+        });
+        globalNav.classList.toggle('is-light', onLight);
+      }, { passive: true });
+    }
+  </script>
+</body>
+</html>
